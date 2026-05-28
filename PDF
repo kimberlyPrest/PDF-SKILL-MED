@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento Médico</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --brand: #2563a8;
+            --brand-light: color-mix(in srgb, var(--brand) 8%, white);
+            --brand-mid: color-mix(in srgb, var(--brand) 20%, white);
+            --brand-dark: color-mix(in srgb, var(--brand) 80%, black);
+            --text: #1a1a1a;
+            --text-soft: #555;
+            --border: color-mix(in srgb, var(--brand) 25%, #e5e5e5);
+            --page: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            background: #f0f0ec;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .page {
+            background: var(--page);
+            width: 100%;
+            max-width: 760px;
+            min-height: 1050px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.10);
+            position: relative;
+        }
+
+        /* HEADER */
+        .header {
+            padding: 32px 48px 24px;
+            border-bottom: 3px solid var(--brand);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            background: var(--brand-light);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1.5px solid var(--border);
+            padding: 6px;
+        }
+
+        .logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .clinic-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .clinic-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--brand-dark);
+            letter-spacing: -0.01em;
+        }
+
+        .clinic-contacts {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .clinic-contacts span {
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            font-weight: 400;
+        }
+
+        .header-badge {
+            background: var(--brand);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 100px;
+            white-space: nowrap;
+            align-self: flex-start;
+        }
+
+        /* TITLE */
+        .doc-title-wrap {
+            padding: 36px 48px 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .doc-label {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--brand);
+            margin-bottom: 10px;
+        }
+
+        .doc-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.9rem;
+            font-weight: 300;
+            color: var(--text);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        .doc-date {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-soft);
+        }
+
+        /* CONTENT */
+        .content {
+            flex: 1;
+            padding: 36px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0 14px;
+        }
+
+        .section-header:first-child {
+            margin-top: 0;
+        }
+
+        .section-icon {
+            font-size: 1.1rem;
+            width: 32px;
+            height: 32px;
+            background: var(--brand-mid);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--brand-dark);
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0 0 44px;
+        }
+
+        .block-p {
+            font-size: 0.92rem;
+            line-height: 1.75;
+            color: var(--text);
+            padding-left: 44px;
+            margin-top: 10px;
+        }
+
+        .block-list {
+            padding-left: 44px;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .block-list li {
+            list-style: none;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .block-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--brand);
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .block-alert {
+            margin: 14px 0 4px 44px;
+            padding: 14px 18px;
+            background: color-mix(in srgb, #e53e3e 8%, white);
+            border-left: 3px solid #e53e3e;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: #7b1a1a;
+        }
+
+        .block-alert b {
+            color: #c53030;
+        }
+
+        .block-info {
+            margin: 14px 0 4px 44px;
+            padding: 14px 18px;
+            background: var(--brand-light);
+            border-left: 3px solid var(--brand);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: var(--brand-dark);
+        }
+
+        /* SIGNATURE */
+        .signature-wrap {
+            margin: 40px 48px 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .signature-line {
+            width: 220px;
+            border-top: 1.5px solid var(--text);
+            padding-top: 8px;
+            text-align: center;
+        }
+
+        .signature-line span {
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            display: block;
+            line-height: 1.5;
+        }
+
+        .signature-line strong {
+            font-size: 0.85rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 32px;
+            padding: 16px 48px;
+            background: var(--brand-light);
+            border-top: 2px solid var(--brand-mid);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-left {
+            font-size: 0.72rem;
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        .footer-left strong {
+            display: block;
+            color: var(--brand-dark);
+            font-weight: 500;
+            margin-bottom: 1px;
+        }
+
+        .footer-right {
+            font-size: 0.68rem;
+            color: var(--text-soft);
+            text-align: right;
+            line-height: 1.6;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .page {
+                box-shadow: none;
+                max-width: 100%;
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page" id="page">
+
+        <header class="header">
+            <div class="header-left">
+                <div class="logo-wrap" id="logoWrap">
+                    <img id="logoImg" src="" alt="Logo" style="display:none">
+                    <svg id="logoPlaceholder" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="8" fill="#e5e5e5" />
+                        <path d="M20 10v20M10 20h20" stroke="#999" stroke-width="3" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="clinic-info">
+                    <div class="clinic-name" id="clinicName"></div>
+                    <div class="clinic-contacts" id="clinicContacts"></div>
+                </div>
+            </div>
+            <div class="header-badge" id="headerBadge">Documento Médico</div>
+        </header>
+
+        <div class="doc-title-wrap">
+            <div class="doc-label">Orientações ao Paciente</div>
+            <div class="doc-title" id="docTitle"></div>
+            <div class="doc-date" id="docDate"></div>
+        </div>
+
+        <div class="content" id="content"></div>
+
+        <div class="signature-wrap" id="signatureWrap" style="display:none">
+            <div class="signature-line">
+                <strong id="sigName"></strong>
+                <span id="sigCRM"></span>
+                <span id="sigSpec"></span>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-left">
+                <strong id="footerName"></strong>
+                <span id="footerContacts"></span>
+            </div>
+            <div class="footer-right" id="footerDate"></div>
+        </footer>
+
+    </div>
+
+    <script>
+        function getHash() {
+            try { return JSON.parse(decodeURIComponent(location.hash.slice(1))); }
+            catch { return null; }
+        }
+
+        function setColor(hex) {
+            if (hex) document.documentElement.style.setProperty('--brand', hex);
+        }
+
+        function buildContent(blocks) {
+            const el = document.getElementById('content');
+            if (!blocks?.length) return;
+            blocks.forEach(b => {
+                if (b.type === 'section') {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'section-header';
+                    wrap.innerHTML = `<div class="section-icon">${b.icon || '📋'}</div><div class="section-title">${b.text}</div>`;
+                    el.appendChild(wrap);
+                    const div = document.createElement('div');
+                    div.className = 'section-divider';
+                    el.appendChild(div);
+                } else if (b.type === 'p') {
+                    const p = document.createElement('p');
+                    p.className = 'block-p';
+                    p.innerHTML = b.text;
+                    el.appendChild(p);
+                } else if (b.type === 'list') {
+                    const ul = document.createElement('ul');
+                    ul.className = 'block-list';
+                    (b.items || []).forEach(item => {
+                        const li = document.createElement('li');
+                        li.innerHTML = item;
+                        ul.appendChild(li);
+                    });
+                    el.appendChild(ul);
+                } else if (b.type === 'alert') {
+                    const div = document.createElement('div');
+                    div.className = 'block-alert';
+                    div.innerHTML = b.text;
+                    el.appendChild(div);
+                } else if (b.type === 'info') {
+                    const div = document.createElement('div');
+                    div.className = 'block-info';
+                    div.innerHTML = b.text;
+                    el.appendChild(div);
+                }
+            });
+        }
+
+        function render(d) {
+            if (!d) return;
+            if (d.color) setColor(d.color);
+
+            if (d.logo) {
+                document.getElementById('logoImg').src = d.logo;
+                document.getElementById('logoImg').style.display = 'block';
+                document.getElementById('logoPlaceholder').style.display = 'none';
+            }
+
+            if (d.name) {
+                document.getElementById('clinicName').textContent = d.name;
+                document.getElementById('footerName').textContent = d.name;
+            }
+
+            const cc = document.getElementById('clinicContacts');
+            const fc = document.getElementById('footerContacts');
+            (d.contacts || []).forEach((c, i) => {
+                const s = document.createElement('span'); s.textContent = c; cc.appendChild(s);
+                fc.innerHTML += (i > 0 ? ' · ' : '') + c;
+            });
+
+            if (d.title) { document.getElementById('docTitle').textContent = d.title; document.title = d.title; }
+            if (d.badge) document.getElementById('headerBadge').textContent = d.badge;
+
+            const now = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('docDate').textContent = 'Emitido em ' + now;
+            document.getElementById('footerDate').textContent = 'Emitido em ' + now;
+
+            buildContent(d.blocks);
+
+            if (d.doctor) {
+                document.getElementById('signatureWrap').style.display = 'flex';
+                if (d.doctor.name) document.getElementById('sigName').textContent = d.doctor.name;
+                if (d.doctor.crm) document.getElementById('sigCRM').textContent = 'CRM ' + d.doctor.crm;
+                if (d.doctor.spec) document.getElementById('sigSpec').textContent = d.doctor.spec;
+            }
+        }
+
+        render(getHash());
+    </script>
+</body>
+
+</html>
