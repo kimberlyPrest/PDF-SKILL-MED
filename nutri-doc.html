@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#1f6f54;
+    --ink:#1a1a18;
+    --muted:#6b6b66;
+    --line:#e6e4de;
+    --paper:#ffffff;
+    --bg:#f3f1ec;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;line-height:1.6}
+  .page{max-width:760px;margin:32px auto;background:var(--paper);
+    padding:56px 60px 64px;border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.06)}
+
+  /* ---- header ---- */
+  header{display:flex;align-items:center;gap:18px;padding-bottom:22px;
+    border-bottom:2px solid var(--accent);margin-bottom:8px}
+  header .logo{max-height:52px;max-width:200px;object-fit:contain}
+  header .mark{font-family:var(--serif);font-weight:600;font-size:24px;
+    letter-spacing:-.01em;color:var(--accent)}
+  header .spacer{flex:1}
+  header .tag{font-size:11px;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--muted);text-align:right}
+
+  h1.title{font-family:var(--serif);font-weight:500;font-size:34px;
+    line-height:1.15;letter-spacing:-.02em;margin:34px 0 28px;
+    color:var(--ink)}
+
+  /* ---- blocks ---- */
+  .blk{margin:0 0 18px}
+  h2.sub{font-family:var(--serif);font-weight:600;font-size:19px;
+    letter-spacing:-.01em;color:var(--accent);margin:30px 0 10px;
+    padding-bottom:6px;border-bottom:1px solid var(--line)}
+  p.para{font-size:15px;color:#2a2a27;margin:0 0 12px}
+  p.para b,p.para strong{font-weight:600;color:var(--ink)}
+  ul.lst{list-style:none;margin:6px 0 14px;padding:0}
+  ul.lst li{position:relative;padding:3px 0 3px 22px;font-size:15px;color:#2a2a27}
+  ul.lst li::before{content:"";position:absolute;left:2px;top:13px;
+    width:7px;height:7px;border-radius:50%;background:var(--accent)}
+
+  table.tbl{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:14px}
+  table.tbl thead th{background:var(--accent);color:#fff;text-align:left;
+    font-weight:500;padding:9px 12px;font-size:12px;text-transform:uppercase;
+    letter-spacing:.04em}
+  table.tbl tbody td{padding:9px 12px;border-bottom:1px solid var(--line);
+    color:#2a2a27;vertical-align:top}
+  table.tbl tbody tr:nth-child(even){background:#faf9f6}
+
+  /* ---- footer ---- */
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted)}
+  footer .c{display:inline-flex;align-items:center;gap:6px}
+  footer .c::before{content:"";width:5px;height:5px;border-radius:50%;
+    background:var(--accent);display:inline-block}
+
+  /* ---- print button ---- */
+  .printbtn{position:fixed;right:22px;bottom:22px;z-index:50;border:none;
+    background:var(--accent);color:#fff;font-family:var(--sans);font-size:14px;
+    font-weight:500;padding:13px 20px;border-radius:10px;cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,.18);transition:transform .12s ease}
+  .printbtn:hover{transform:translateY(-2px)}
+
+  /* ---- states ---- */
+  .state{max-width:560px;margin:80px auto;text-align:center;padding:0 24px}
+  .state h3{font-family:var(--serif);font-size:24px;margin-bottom:10px}
+  .state p{color:var(--muted);font-size:15px;margin-bottom:22px}
+  .state code{background:#eceae4;padding:2px 7px;border-radius:5px;font-size:13px}
+  .state button{border:1px solid var(--accent);background:transparent;
+    color:var(--accent);font-family:var(--sans);font-size:14px;padding:10px 18px;
+    border-radius:9px;cursor:pointer}
+  .state button:hover{background:var(--accent);color:#fff}
+
+  /* ---- print ---- */
+  @media print{
+    @page{size:A4;margin:16mm 15mm}
+    html,body{background:#fff}
+    .page{box-shadow:none;border:none;margin:0;max-width:none;padding:0}
+    .printbtn,.no-print{display:none!important}
+    h2.sub,table.tbl,ul.lst,.blk{break-inside:avoid}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<button class="printbtn no-print" id="pbtn" style="display:none" onclick="window.print()">Imprimir / Salvar PDF</button>
+
+<script>
+(function(){
+  var root=document.getElementById("root");
+  var pbtn=document.getElementById("pbtn");
+
+  // minimal HTML sanitizer for <p> blocks: escape everything, then re-allow a safe inline subset
+  function inline(s){
+    s=String(s||"");
+    s=s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    s=s.replace(/&lt;(\/?)(b|strong|i|em|u)&gt;/gi,"<$1$2>");
+    s=s.replace(/&lt;br\s*\/?&gt;/gi,"<br>");
+    return s;
+  }
+  function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  function renderDoc(d){
+    if(d.color&&/^#?[0-9a-fA-F]{3,8}$/.test(d.color)){
+      document.documentElement.style.setProperty("--accent",d.color[0]==="#"?d.color:"#"+d.color);
+    }
+    if(d.title) document.title=d.title;
+
+    var html='<div class="page">';
+
+    // header
+    html+='<header>';
+    if(d.logo){ html+='<img class="logo" src="'+esc(d.logo)+'" alt="'+esc(d.name||"")+'">'; }
+    else if(d.name){ html+='<span class="mark">'+esc(d.name)+'</span>'; }
+    html+='<span class="spacer"></span>';
+    html+='<span class="tag">Plano personalizado</span>';
+    html+='</header>';
+
+    if(d.title) html+='<h1 class="title">'+esc(d.title)+'</h1>';
+
+    // blocks
+    (d.blocks||[]).forEach(function(b){
+      if(!b||!b.type) return;
+      if(b.type==="h"){ html+='<h2 class="sub">'+esc(b.text)+'</h2>'; }
+      else if(b.type==="p"){ html+='<p class="para">'+inline(b.text)+'</p>'; }
+      else if(b.type==="list"){
+        html+='<ul class="lst">';
+        (b.items||[]).forEach(function(it){ html+='<li>'+inline(it)+'</li>'; });
+        html+='</ul>';
+      }
+      else if(b.type==="table"){
+        html+='<table class="tbl">';
+        if(b.headers&&b.headers.length){
+          html+='<thead><tr>';
+          b.headers.forEach(function(h){ html+='<th>'+esc(h)+'</th>'; });
+          html+='</tr></thead>';
+        }
+        html+='<tbody>';
+        (b.rows||[]).forEach(function(r){
+          html+='<tr>';
+          (r||[]).forEach(function(c){ html+='<td>'+inline(c)+'</td>'; });
+          html+='</tr>';
+        });
+        html+='</tbody></table>';
+      }
+    });
+
+    // footer
+    if(d.contacts&&d.contacts.length){
+      html+='<footer>';
+      d.contacts.forEach(function(c){ html+='<span class="c">'+esc(c)+'</span>'; });
+      html+='</footer>';
+    }
+    html+='</div>';
+    root.innerHTML=html;
+    pbtn.style.display="block";
+  }
+
+  function showState(title,msg,withDemo){
+    var h='<div class="state"><h3>'+title+'</h3><p>'+msg+'</p>';
+    if(withDemo) h+='<button onclick="window.__demo()">Ver exemplo</button>';
+    h+='</div>';
+    root.innerHTML=h;
+  }
+
+  window.__demo=function(){
+    var sample={
+      name:"NutriCare",color:"#1f6f54",
+      title:"Plano Alimentar — Maria Souza",
+      contacts:["CRN 12345","contato@nutricare.com","@nutricare"],
+      blocks:[
+        {type:"p",text:"Objetivo: <b>perda de peso gradual</b> com manutenção de massa magra. Meta calórica: ~1.650 kcal/dia."},
+        {type:"h",text:"Café da manhã — 7h"},
+        {type:"table",headers:["Alimento","Quantidade","Substituição"],
+          rows:[["Ovos mexidos","2 unidades","1 scoop whey + 1 fatia de pão"],
+                ["Aveia em flocos","40 g (4 col. sopa)","Tapioca 2 col. sopa"],
+                ["Mamão","1 fatia média","1 banana"]]},
+        {type:"h",text:"Orientações gerais"},
+        {type:"list",items:["Ingerir ao menos 2 L de água ao dia.","Evitar líquidos durante as refeições.","Mastigar devagar."]}
+      ]
+    };
+    location.hash=encodeURIComponent(JSON.stringify(sample));
+    boot();
+  };
+
+  function boot(){
+    var raw=location.hash.slice(1);
+    if(!raw){
+      showState("Documento dinâmico","O conteúdo vive na URL. Gere um link no formato <code>BASE_URL#json</code> e abra aqui.",true);
+      return;
+    }
+    try{
+      var d=JSON.parse(decodeURIComponent(raw));
+      renderDoc(d);
+    }catch(e){
+      showState("Não foi possível ler o documento","O conteúdo no link parece inválido ou incompleto.",false);
+    }
+  }
+
+  window.addEventListener("hashchange",boot);
+  boot();
+})();
+</script>
+</body>
+</html>
